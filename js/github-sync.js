@@ -16,7 +16,7 @@ async function githubBackup() {
       const { photo, ...rest } = l;
       return { ...rest, hasPhoto: !!photo };
     }),
-    settings: data.settings,
+    settings: (() => { const { ghToken, ...safe } = data.settings; return safe; })(),
     exportedAt: data.exportedAt,
   };
 
