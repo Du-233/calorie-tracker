@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FFF8F0">
+<title>🌸 小食光</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ========== 顶部栏 ========== -->
+<header class="header">
+  <h1 class="app-title">🌸 小食光</h1>
+  <span class="header-date" id="headerDate"></span>
+</header>
+
+<!-- ========== 页面容器 ========== -->
+<main class="main-content">
+
+  <!-- ─── 今天页面 ─── -->
+  <section class="page active" id="page-today">
+
+    <!-- 目标卡片 -->
+    <div class="goal-card" id="goalCard">
+      <div class="goal-header">
+        <span class="goal-label">🎯 今天目标</span>
+        <span class="goal-value" id="goalValue">2000</span>
+        <span class="goal-unit">kcal</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="goal-summary">
+        <span>已吃 <strong id="consumedKcal">0</strong> kcal</span>
+        <span>还可 <strong id="remainingKcal">2000</strong> kcal</span>
+      </div>
+    </div>
+
+    <!-- 情绪语句 -->
+    <div class="mood-msg" id="moodMsg">今天也要好好吃饭哦～🌸</div>
+
+    <!-- 四个餐次卡片 -->
+    <div class="meal-cards">
+
+      <!-- 早餐 -->
+      <div class="meal-card" data-meal="breakfast">
+        <div class="meal-card-header">
+          <span class="meal-icon">🌅</span>
+          <span class="meal-name">早餐</span>
+          <span class="meal-subtotal" id="subtotal-breakfast">0 kcal</span>
+        </div>
+        <div class="meal-items" id="items-breakfast"></div>
+        <div class="meal-empty" id="empty-breakfast">🌿 还没记录呢～</div>
+        <button class="btn-add-meal" data-meal="breakfast">＋ 添加食物</button>
+      </div>
+
+      <!-- 午餐 -->
+      <div class="meal-card" data-meal="lunch">
+        <div class="meal-card-header">
+          <span class="meal-icon">☀️</span>
+          <span class="meal-name">午餐</span>
+          <span class="meal-subtotal" id="subtotal-lunch">0 kcal</span>
+        </div>
+        <div class="meal-items" id="items-lunch"></div>
+        <div class="meal-empty" id="empty-lunch">🌿 还没记录呢～</div>
+        <button class="btn-add-meal" data-meal="lunch">＋ 添加食物</button>
+      </div>
+
+      <!-- 晚餐 -->
+      <div class="meal-card" data-meal="dinner">
+        <div class="meal-card-header">
+          <span class="meal-icon">🌙</span>
+          <span class="meal-name">晚餐</span>
+          <span class="meal-subtotal" id="subtotal-dinner">0 kcal</span>
+        </div>
+        <div class="meal-items" id="items-dinner"></div>
+        <div class="meal-empty" id="empty-dinner">🌿 还没记录呢～</div>
+        <button class="btn-add-meal" data-meal="dinner">＋ 添加食物</button>
+      </div>
+
+      <!-- 加餐 -->
+      <div class="meal-card" data-meal="snack">
+        <div class="meal-card-header">
+          <span class="meal-icon">🍪</span>
+          <span class="meal-name">加餐</span>
+          <span class="meal-subtotal" id="subtotal-snack">0 kcal</span>
+        </div>
+        <div class="meal-items" id="items-snack"></div>
+        <div class="meal-empty" id="empty-snack">🌿 还没记录呢～</div>
+        <button class="btn-add-meal" data-meal="snack">＋ 添加食物</button>
+      </div>
+
+    </div>
+
+    <!-- 底部汇总 -->
+    <div class="day-summary" id="daySummary">
+      今天吃了 <strong>0</strong> 样 · 共 <strong>0</strong> kcal
+    </div>
+
+  </section>
+
+  <!-- ─── 统计页面 ─── -->
+  <section class="page" id="page-stats">
+    <h2 class="page-title">📊 饮食统计</h2>
+
+    <div class="chart-card">
+      <h3>本周摄入</h3>
+      <canvas id="chartWeek" height="200"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h3>本月趋势</h3>
+      <canvas id="chartMonth" height="200"></canvas>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-card chart-half">
+        <h3>餐次占比</h3>
+        <canvas id="chartMeal" height="180"></canvas>
+      </div>
+      <div class="chart-card chart-half">
+        <h3>🏆 本月最爱</h3>
+        <ol class="top-foods" id="topFoods"></ol>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>本月概览</h3>
+      <div class="month-overview" id="monthOverview"></div>
+    </div>
+  </section>
+
+  <!-- ─── 日历页面 ─── -->
+  <section class="page" id="page-calendar">
+    <h2 class="page-title">📅 饮食日历</h2>
+    <div class="calendar-nav">
+      <button class="btn-month" id="btnPrevMonth">◀</button>
+      <span class="calendar-month" id="calendarMonth"></span>
+      <button class="btn-month" id="btnNextMonth">▶</button>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div class="calendar-detail" id="calendarDetail"></div>
+  </section>
+
+  <!-- ─── 设置页面 ─── -->
+  <section class="page" id="page-settings">
+    <h2 class="page-title">⚙️ 设置</h2>
+
+    <div class="settings-card">
+      <h3>🎯 每日卡路里目标</h3>
+      <div class="input-row">
+        <input type="number" id="settingGoal" class="input" min="500" max="10000" step="100" value="2000">
+        <span class="input-unit">kcal</span>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <h3>☁️ GitHub 数据备份</h3>
+      <p class="settings-hint">设置后可将饮食数据自动备份到你的 GitHub 仓库</p>
+      <div class="input-group">
+        <label>GitHub 用户名</label>
+        <input type="text" id="settingGhUser" class="input" placeholder="your-username">
+      </div>
+      <div class="input-group">
+        <label>仓库名</label>
+        <input type="text" id="settingGhRepo" class="input" placeholder="calorie-data">
+      </div>
+      <div class="input-group">
+        <label>Personal Access Token</label>
+        <input type="password" id="settingGhToken" class="input" placeholder="ghp_xxxxxxxxxxxx">
+        <span class="settings-hint">需要 repo 权限。Token 仅保存在你的浏览器中</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnBackup">📤 备份到 GitHub</button>
+        <button class="btn btn-outline" id="btnRestore">📥 从 GitHub 恢复</button>
+      </div>
+      <div class="sync-status" id="syncStatus"></div>
+    </div>
+
+    <div class="settings-card">
+      <h3>💾 本地数据</h3>
+      <div class="btn-row">
+        <button class="btn btn-outline" id="btnExport">📥 导出数据文件</button>
+      </div>
+    </div>
+
+    <div class="settings-card settings-danger">
+      <h3>⚠️ 危险操作</h3>
+      <button class="btn btn-danger" id="btnClear">🗑 清除所有数据</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========== 底部导航栏 ========== -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-page="today">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">今天</span>
+  </button>
+  <button class="nav-btn" data-page="stats">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">统计</span>
+  </button>
+  <button class="nav-btn" data-page="calendar">
+    <span class="nav-icon">📅</span>
+    <span class="nav-label">日历</span>
+  </button>
+  <button class="nav-btn" data-page="settings">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">设置</span>
+  </button>
+</nav>
+
+<!-- ========== 录入弹窗 ========== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalAdd">
+
+    <!-- 步骤 0: 选照片来源 -->
+    <div class="modal-step active" id="stepPhoto">
+      <h3 class="modal-title">添加食物到 <span id="addToMealName"></span></h3>
+      <div class="photo-options">
+        <button class="photo-option" id="btnCamera">
+          <span class="photo-option-icon">📷</span>
+          <span>拍照</span>
+        </button>
+        <button class="photo-option" id="btnGallery">
+          <span class="photo-option-icon">🖼️</span>
+          <span>从相册选</span>
+        </button>
+      </div>
+      <button class="btn-skip-photo" id="btnSkipPhoto">跳过，不拍照</button>
+      <input type="file" id="inputCamera" accept="image/*" capture="environment" style="display:none">
+      <input type="file" id="inputGallery" accept="image/*" style="display:none">
+    </div>
+
+    <!-- 步骤 1: 写描述 + 搜食物 -->
+    <div class="modal-step" id="stepInfo">
+      <h3 class="modal-title">记录这一餐</h3>
+      <div class="photo-preview-wrap" id="photoPreviewWrap" style="display:none">
+        <img id="photoPreview" src="" alt="食物照片">
+        <button class="btn-remove-photo" id="btnRemovePhoto">✕</button>
+      </div>
+      <div class="input-group">
+        <label>写一句话描述吧～</label>
+        <input type="text" id="inputDesc" class="input" placeholder="比如：配了一杯拿铁 ☕">
+      </div>
+      <div class="input-group">
+        <label>搜索食物名称</label>
+        <input type="text" id="inputFood" class="input search-input" placeholder="输入食物名称…" autocomplete="off">
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+
+    <!-- 步骤 2: 选份量 + 确认 -->
+    <div class="modal-step" id="stepPortion">
+      <h3 class="modal-title">选择份量</h3>
+      <div class="selected-food" id="selectedFoodName"></div>
+      <div class="portion-options" id="portionOptions"></div>
+      <div class="portion-custom">
+        <label>或自定义克数：</label>
+        <div class="input-row">
+          <input type="number" id="inputGrams" class="input" min="1" max="5000" placeholder="克数">
+          <span class="input-unit">g</span>
+        </div>
+      </div>
+      <div class="calorie-preview" id="caloriePreview"></div>
+    </div>
+
+    <!-- 按钮 -->
+    <div class="modal-buttons">
+      <button class="btn btn-outline modal-cancel" id="btnCancel">取消</button>
+      <button class="btn btn-primary" id="btnNext" disabled>下一步</button>
+      <button class="btn btn-primary" id="btnConfirm" style="display:none">✅ 记录这一餐</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 编辑弹窗 ========== -->
+<div class="modal-overlay" id="modalEditOverlay">
+  <div class="modal" id="modalEdit">
+    <h3 class="modal-title">编辑记录</h3>
+    <div class="photo-preview-wrap" id="editPhotoPreviewWrap" style="display:none">
+      <img id="editPhotoPreview" src="" alt="食物照片">
+    </div>
+    <div class="input-group">
+      <label>描述</label>
+      <input type="text" id="editDesc" class="input" placeholder="描述这顿饭…">
+    </div>
+    <div class="input-group">
+      <label>食物名称</label>
+      <input type="text" id="editFood" class="input search-input" placeholder="食物名称" autocomplete="off">
+      <div class="search-results" id="editSearchResults"></div>
+    </div>
+    <div class="input-group">
+      <label>卡路里</label>
+      <div class="input-row">
+        <input type="number" id="editCalories" class="input" min="1" max="10000">
+        <span class="input-unit">kcal</span>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button class="btn btn-outline modal-cancel" id="btnEditCancel">取消</button>
+      <button class="btn btn-primary" id="btnEditSave">💾 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 日历详情弹窗 ========== -->
+<div class="modal-overlay" id="modalDayOverlay">
+  <div class="modal" id="modalDay">
+    <h3 class="modal-title" id="modalDayTitle"></h3>
+    <div class="modal-day-content" id="modalDayContent"></div>
+    <div class="modal-buttons">
+      <button class="btn btn-outline modal-cancel" id="btnDayClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 确认删除弹窗 ========== -->
+<div class="modal-overlay" id="modalConfirmOverlay">
+  <div class="modal modal-confirm" id="modalConfirm">
+    <h3 class="modal-title">确认删除</h3>
+    <p class="confirm-text">确定要删除这条记录吗？删除后不可恢复哦～</p>
+    <div class="modal-buttons">
+      <button class="btn btn-outline modal-cancel" id="btnConfirmNo">取消</button>
+      <button class="btn btn-danger" id="btnConfirmYes">确认删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Toast 提示 ========== -->
+<div class="toast" id="toast"></div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- App scripts -->
+<script src="js/food-db.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/mood.js"></script>
+<script src="js/github-sync.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
