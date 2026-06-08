@@ -1,10 +1,23 @@
 {
-  "logs": [],
+  "logs": [
+    {
+      "id": "xsg_mq5bo18k_f2xal4",
+      "date": "2026-06-08",
+      "meal": "breakfast",
+      "time": "22:44",
+      "description": "",
+      "foodName": "茶叶蛋",
+      "portion": "55g",
+      "grams": 55,
+      "calories": 83,
+      "hasPhoto": true
+    }
+  ],
   "settings": {
     "goal": 2000,
     "ghUser": "Du-233",
     "ghRepo": "calorie-tracker",
     "keepPhotosDays": 30
   },
-  "exportedAt": "2026-06-08T14:44:12.831Z"
+  "exportedAt": "2026-06-08T14:44:48.697Z"
 }
