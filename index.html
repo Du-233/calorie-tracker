@@ -109,19 +109,25 @@
     <h2 class="page-title">📊 饮食统计</h2>
 
     <div class="chart-card">
-      <h3>本周摄入</h3>
-      <canvas id="chartWeek" height="200"></canvas>
+      <h3>每日摄入热量</h3>
+      <div class="chart-wrapper chart-wrapper-week">
+        <canvas id="chartWeek"></canvas>
+      </div>
     </div>
 
     <div class="chart-card">
-      <h3>本月趋势</h3>
-      <canvas id="chartMonth" height="200"></canvas>
+      <h3>本月每日摄入</h3>
+      <div class="chart-wrapper chart-wrapper-month">
+        <canvas id="chartMonth"></canvas>
+      </div>
     </div>
 
     <div class="chart-row">
       <div class="chart-card chart-half">
         <h3>餐次占比</h3>
-        <canvas id="chartMeal" height="180"></canvas>
+        <div class="chart-wrapper chart-wrapper-meal">
+          <canvas id="chartMeal"></canvas>
+        </div>
       </div>
       <div class="chart-card chart-half">
         <h3>🏆 本月最爱</h3>

@@ -916,10 +916,36 @@ body {
   font-weight: 600;
 }
 
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
+.chart-wrapper-week {
+  height: 260px;
+}
+
+.chart-wrapper-month {
+  height: 240px;
+}
+
+.chart-wrapper-meal {
+  height: 220px;
+}
+
+.chart-wrapper canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .chart-row {
   display: flex;
   gap: 12px;
   margin-bottom: 12px;
+  align-items: stretch;
 }
 
 .chart-half {
@@ -1049,6 +1075,28 @@ body {
 }
 
 /* ---------- Responsive Tweaks ---------- */
+@media (max-width: 479px) {
+  .chart-row {
+    flex-direction: column;
+  }
+
+  .chart-wrapper-week {
+    height: 240px;
+  }
+
+  .chart-wrapper-month {
+    height: 220px;
+  }
+
+  .chart-wrapper-meal {
+    height: 200px;
+  }
+
+  .chart-card {
+    padding: 14px;
+  }
+}
+
 @media (min-width: 480px) {
   .meal-cards {
     gap: 14px;
@@ -1061,6 +1109,24 @@ body {
 
   .chart-row {
     gap: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    max-width: 720px;
+  }
+
+  .chart-wrapper-week {
+    height: 300px;
+  }
+
+  .chart-wrapper-month {
+    height: 280px;
+  }
+
+  .chart-wrapper-meal {
+    height: 240px;
   }
 }
 

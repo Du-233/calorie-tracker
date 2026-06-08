@@ -37,7 +37,7 @@ function renderWeekChart() {
     d.setDate(monday.getDate() + i);
     const ds = formatDate(d);
     const summary = getDaySummary(ds);
-    const weekDays = ['一','二','三','四','五','六','日'];
+    const weekDays = ['周一','周二','周三','周四','周五','周六','周日'];
     days.push(weekDays[i]);
     values.push(summary.totalCalories);
     goalLine.push(goal);
@@ -51,11 +51,13 @@ function renderWeekChart() {
       labels: days,
       datasets: [
         {
-          label: '摄入 (kcal)',
+          label: '每日摄入 (kcal)',
           data: values,
           backgroundColor: values.map(v => v > goal ? CHART_COLORS.pink : CHART_COLORS.mint),
-          borderRadius: 8,
+          borderRadius: 10,
           borderSkipped: false,
+          barThickness: 24,
+          maxBarThickness: 28,
         },
         {
           label: '目标',
@@ -72,18 +74,27 @@ function renderWeekChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: false,
       plugins: {
         legend: { display: true, position: 'bottom', labels: { boxWidth: 12, padding: 16, font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed.y ?? context.parsed;
+              return `${context.dataset.label}：${value} kcal`;
+            },
+          },
+        },
       },
       scales: {
         y: { beginAtZero: true, grid: { color: '#F5F0EB' }, ticks: { font: { size: 10 } } },
-        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        x: { grid: { display: false }, ticks: { autoSkip: false, maxRotation: 0, minRotation: 0, font: { size: 10 } } },
       },
     },
   });
 }
 
-// ── 本月折线图 ──
+// ── 本月每日摄入柱状图 ──
 
 function renderMonthChart() {
   const ctx = document.getElementById('chartMonth');
@@ -103,31 +114,31 @@ function renderMonthChart() {
     const ds = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const summary = getDaySummary(ds);
     labels.push(`${d}日`);
-    values.push(summary.totalCalories > 0 ? summary.totalCalories : null);
+    values.push(summary.totalCalories);
     goalLine.push(goal);
   }
 
   if (chartMonthInstance) chartMonthInstance.destroy();
 
   chartMonthInstance = new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
       labels,
       datasets: [
         {
-          label: '摄入 (kcal)',
+          label: '每日摄入 (kcal)',
           data: values,
-          borderColor: CHART_COLORS.pink,
-          backgroundColor: CHART_COLORS.pinkLight,
-          fill: true,
-          tension: 0.35,
-          pointRadius: 3,
-          pointBackgroundColor: CHART_COLORS.pink,
-          spanGaps: false,
+          backgroundColor: values.map(v => v > goal ? CHART_COLORS.pink : CHART_COLORS.pinkLight),
+          borderRadius: 6,
+          borderSkipped: false,
+          barPercentage: 0.9,
+          categoryPercentage: 0.9,
+          maxBarThickness: 18,
         },
         {
           label: '目标',
           data: goalLine,
+          type: 'line',
           borderColor: CHART_COLORS.orange,
           borderWidth: 2,
           borderDash: [6, 4],
@@ -139,12 +150,30 @@ function renderMonthChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: false,
       plugins: {
         legend: { display: true, position: 'bottom', labels: { boxWidth: 12, padding: 16, font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed.y ?? context.parsed;
+              return `${context.dataset.label}：${value} kcal`;
+            },
+          },
+        },
       },
       scales: {
         y: { beginAtZero: true, grid: { color: '#F5F0EB' }, ticks: { font: { size: 10 } } },
-        x: { grid: { display: false }, ticks: { maxTicksLimit: 15, font: { size: 9 } } },
+        x: {
+          grid: { display: false },
+          ticks: {
+            autoSkip: true,
+            maxTicksLimit: 12,
+            maxRotation: 0,
+            minRotation: 0,
+            font: { size: 9 },
+          },
+        },
       },
     },
   });
